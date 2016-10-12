@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>Escaner de Zona</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.8/jquery.jqplot.min.css">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>	
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<script src="http://code.highcharts.com/highcharts.js"></script>
+	<script src="http://code.highcharts.com/modules/exporting.js"></script>	
+
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="page-header">
+				<H1>Escaner de zona <small>Desarrollado por <a href="https://www.facebook.com/nigthmare.dedavila" target="_blank">Nightmare</a></small></H1>
+			</div>
+
+			<div class="col-md-12">
+				<div class="col-md-6 col-md-offset-3">
+					<input type="button" class="btn btn-success btn-lg btn-block" id="start" value="INICIAR">
+				</div>
+			</div>
+
+			<div class="col-md-12">
+				<div class="col-md-6">
+					<div id="chart1" style="height:250px;"></div>  
+				</div>
+				<div class="col-md-6">
+					<div id="chart2" style="height:250px;"></div>
+				</div>
+				<div class="col-md-6">
+					<div id="chart3" style="height:250px;"></div>
+				</div>
+				<div class="col-md-6">
+					<div id="chart4" style="height:250px;"></div>
+				</div>
+			</div>
+			<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+			<script type="text/javascript">
+				$(document).ready(function()
+				{
+					var socket = io.connect();
+					var sensor1 = new Array();
+					var sensor2 = new Array();
+					var sensor3 = new Array();
+					var sensor4 = new Array();
+
+					$("#start").click(function(){
+						socket.emit('start','A');
+					});
+										    
+                   socket.on('data', function (data) 
+                   {
+                        
+						var desc=data.split(':');
+
+                        var dataint1=desc[1];
+                        var dataint2=desc[2];
+                        var dataint3=desc[3];
+                        var dataint4=desc[4];
+
+                        dataint1=parseInt(dataint1);
+                        dataint2=parseInt(dataint2);
+                        dataint3=parseInt(dataint3);
+                        dataint4=parseInt(dataint4);
+
+						sensor1.push(dataint1); 
+						sensor2.push(dataint2); 
+						sensor3.push(dataint3); 
+						sensor4.push(dataint4);
+
+						///PRIMERA GRAFICA 
+
+						$('#chart1').highcharts({
+					        chart: {
+					            type: 'line'
+					        },
+					        title: {
+					            text: 'SENSOR 1'
+					        },
+					        xAxis: {
+					            tickInterval: 1,
+					            title: {
+					                text: 'Lecturas'
+					            }
+					        },
+					        yAxis: {
+					            title: {
+					                text: 'Distancia (cm)'
+					            }
+					        },
+					         credits: {
+						      	enabled: false
+						  	},
+					        plotOptions: {
+					            line: {
+					                dataLabels: {
+					                    enabled: true
+					                },
+					                animation: false,
+					                enableMouseTracking: false
+					            }
+					        },
+					        series: [{
+					            name: 'Sensor 1',
+					            color: 'blue',
+					            data: sensor1,
+					            pointStart: 1
+					        }]
+					    });
+
+
+					    ///SEGUNDA GRAFICA
+
+					    $('#chart2').highcharts({
+					        chart: {
+					            type: 'line'
+					        },
+					        title: {
+					            text: 'SENSOR 2'
+					        },
+					        xAxis: {
+					            tickInterval: 1,
+					            title: {
+					                text: 'Lecturas'
+					            }
+					        },
+					        yAxis: {
+					            title: {
+					                text: 'Distancia (cm)'
+					            }
+					        },
+					         credits: {
+						      	enabled: false
+						  	},
+					        plotOptions: {
+					            line: {
+					                dataLabels: {
+					                    enabled: true
+					                },
+					                animation: false,
+					                enableMouseTracking: false
+					            }
+					        },
+					        series: [{
+					            name: 'Sensor 2',
+					            color: 'purple',
+					            data: sensor2,
+					            pointStart: 1
+					        }]
+					    });
+
+					    ///TERCERA GRAFICA
+
+					    $('#chart3').highcharts({
+					        chart: {
+					            type: 'line'
+					        },
+					        title: {
+					            text: 'SENSOR 3'
+					        },
+					        xAxis: {
+					            tickInterval: 1,
+					            title: {
+					                text: 'Lecturas'
+					            }
+					        },
+					        yAxis: {
+					            title: {
+					                text: 'Distancia (cm)'
+					            }
+					        },
+					         credits: {
+						      	enabled: false
+						  	},
+					        plotOptions: {
+					            line: {
+					                dataLabels: {
+					                    enabled: true
+					                },
+					                animation: false,
+					                enableMouseTracking: false
+					            }
+					        },
+					        series: [{
+					            name: 'Sensor 3',
+					            color: 'red',
+					            data: sensor3,
+					            pointStart: 1
+					        }]
+					    });
+
+					    ///CUARTA GRAFICA
+
+					    $('#chart4').highcharts({
+					        chart: {
+					            type: 'line'
+					        },
+					        title: {
+					            text: 'SENSOR 4'
+					        },
+					        xAxis: {
+					            tickInterval: 1,
+					            title: {
+					                text: 'Lecturas'
+					            }
+					        },
+					        yAxis: {
+					            title: {
+					                text: 'Distancia (cm)'
+					            }
+					        },
+					         credits: {
+						      	enabled: false
+						  	},
+					        plotOptions: {
+					            line: {
+					                dataLabels: {
+					                    enabled: true
+					                },
+					                animation: false,
+					                enableMouseTracking: false
+					            }
+					        },
+					        series: [{
+					            name: 'Sensor 4',
+					            color: 'green',
+					            data: sensor4,
+					            pointStart: 1
+					        }]
+					    });
+
+                    });
+						    
+				});				      
+			</script>
+
+		</div>
+	</div>
+</body>
+</html>
